@@ -1,6 +1,7 @@
 
 class gridTable
 {
+    
     constructor (container){
         
         this.container=container;
@@ -8,7 +9,9 @@ class gridTable
         this.gridDiv.id="grid-div";
         this.gridDiv.classList.add('grid-div');
         this.container.appendChild(this.gridDiv);
-        this.board = [ 
+        this.initSquareMatrix();
+        this.createSquares();
+        this.currentState=[ 
             ['wR','wN','wB','wQ','wK','wB','wN','wR'],
             ['wP','wP','wP','wP','wP','wP','wP','wP'],
             ['  ','  ','  ','  ','  ','  ','  ','  '],
@@ -16,16 +19,26 @@ class gridTable
             ['  ','  ','  ','  ','  ','  ','  ','  '],
             ['  ','  ','  ','  ','  ','  ','  ','  '],
             ['bP','bP','bP','bP','bP','bP','bP','bP'],
-            ['bR','bN','bB','bQ','bK','bB','bN','bR'] ]
-
-        this.chessMatrix = [];
+            ['bR','bN','bB','bQ','bK','bB','bN','bR'] ];
+    
+       
+       
+       
+    }
+    
+    initSquareMatrix()
+    {
+        this.squaresMatrix = [];
         for (let i = 0; i < 8; i++) {
-            this.chessMatrix[i] = [];
+            this.squaresMatrix[i] = [];
             for (let j = 0; j < 8; j++) {
-                this.chessMatrix[i][j] = null;
+                this.squaresMatrix[i][j] = null;
             }
         }
+    }
 
+    createSquares()
+    {
         countDown.parentNode.removeChild(countDown);
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
@@ -38,111 +51,25 @@ class gridTable
                     createdDiv.classList.add('black-div');
                     
                 }
-                this.chessMatrix[i][j] = createdDiv;
+                this.squaresMatrix[i][j] = createdDiv;
             }
         }
-       
-       
     }
-    
-    
 
-    movePiece(board)
-{
-    // Move King's Pawn forward 2
-    board[4][4] = board[6][4];
-    board[6][4] = '  ';
-    return board;
-}
+ 
     addPieces()
     {
+       
         for(let i=0;i<8;i++)
             for(let j=0;j<8;j++)
             {
-                
-                if(this.board[i][j]=="wQ")
+                if(this.currentState[i][j]!="  ")
                 {
-                    let piece=new whiteQueen(this);
-                    this.chessMatrix[i][j].innerHTML=piece.img;
-
+                    let newPiece=new piece();
+                    newPiece=putPieceInSquare(this.currentState[i][j],this.gridDiv);
+                    emptyBoard.squaresMatrix[i][j].appendChild(newPiece.img);
                 }
-
-                if(this.board[i][j]=="bQ")
-                {
-                    let piece=new blackQueen(this);
-                    this.chessMatrix[i][j].innerHTML=piece.img;
-
-                }
-
-                if(this.board[i][j]=="wK")
-                {
-                    let piece=new whiteKing(this);
-                    this.chessMatrix[i][j].innerHTML=piece.img;
-
-                }
-
-                if(this.board[i][j]=="bK")
-                {
-                    let piece=new blackKing(this);
-                    this.chessMatrix[i][j].innerHTML=piece.img;
-
-                }
-
-                if(this.board[i][j]=="wR")
-                {
-                    let piece=new whiteRook(this);
-                    this.chessMatrix[i][j].innerHTML=piece.img;
-
-                }
-
-                if(this.board[i][j]=="bR")
-                {
-                    let piece=new blackRook(this);
-                    this.chessMatrix[i][j].innerHTML=piece.img;
-
-                }
-
-                if(this.board[i][j]=="wN")
-                {
-                    let piece=new whiteKnight(this);
-                    this.chessMatrix[i][j].innerHTML=piece.img;
-
-                }
-
-                if(this.board[i][j]=="bN")
-                {
-                    let piece=new blackKnight(this);
-                    this.chessMatrix[i][j].innerHTML=piece.img;
-
-                }
-
-                if(this.board[i][j]=="wB")
-                {
-                    let piece=new whiteBishop(this);
-                    this.chessMatrix[i][j].innerHTML=piece.img;
-
-                }
-
-                if(this.board[i][j]=="bB")
-                {
-                    let piece=new blackBishop(this);
-                    this.chessMatrix[i][j].innerHTML=piece.img;
-
-                }
-
-                if(this.board[i][j]=="wP")
-                {
-                    let piece=new whitePawn(this);
-                    this.chessMatrix[i][j].innerHTML=piece.img;
-
-                }
-
-                if(this.board[i][j]=="bP")
-                {
-                    let piece=new blackPawn(this);
-                    this.chessMatrix[i][j].innerHTML=piece.img;
-
-                }
+               
             }
     }
 }

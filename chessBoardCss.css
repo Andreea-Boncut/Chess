@@ -18,14 +18,31 @@
     height: 100px;
     width: 100px;
     background-color: #f2ebdd;
+    box-shadow: 0 0 0 3px black;
 }
+
+.white-div:hover {
+
+   
+    box-shadow: 0 0 0 3px black;
+  }
 
 .black-div {
     height: 100px;
     width: 100px;
     background-color: #3E3F4A;
+    box-shadow: 0 0 0 3px black;
 }
 
+.black-div:hover {
+
+   
+    box-shadow: 0 0 0 3px black;
+  }
+
+img:hover{
+    width:105%;
+}
 .grid-div{
    
     padding-top:1.5%;
@@ -33,4 +50,5 @@
     justify-content: center;
     grid-template-columns: auto auto auto auto auto auto auto auto;
     grid-gap: 0px;
+    
   }

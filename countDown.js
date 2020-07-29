@@ -12,6 +12,8 @@ let seconds=5;
 let body = document.getElementsByTagName('body')[0].appendChild(mainDiv);
 mainDiv.appendChild(countDown);
 
+let emptyBoard;
+
 function Decrement(){
     countDown.textContent=seconds;
     seconds--;
@@ -19,7 +21,8 @@ function Decrement(){
         setTimeout('Decrement()',1000);
     }
     else{
-        let emptyBoard=new gridTable(mainDiv);
-        emptyBoard.addPieces();
+        emptyBoard=new gridTable(mainDiv)
+       
     }
 }
+
