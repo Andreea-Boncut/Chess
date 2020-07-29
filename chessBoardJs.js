@@ -1,109 +1,38 @@
-class piece {
-    constructor() {
-     
-    }
-  }
-
-class whiteQueen{
-    img="<img src='wQ.png'>";
-}
-
-class blackQueen{
-
-}
-
-class whiteKing{
-
-}
-
-class blackKing{
-
-}
-
-class whiteRook{
-
-}
-
-class blackRook{
-
-}
-
-class whiteBishop{
-
-}
-
-class blackBishop{
-
-}
-
-class whiteKnight{
-
-}
-
-class blackKnight{
-
-}
-
-class whitePawn{
-
-}
-
-class blackPawn{
-
-}
+document.write('<scr'+'ipt type="text/javascript" src="pieces.js" ></scr'+'ipt>');
+document.write('<scr'+'ipt type="text/javascript" src="countDown.js" ></scr'+'ipt>');
+document.write('<scr'+'ipt type="text/javascript" src="emptyBoard.js" ></scr'+'ipt>');
 
 
-let countDown = document.createElement('p'); 
-countDown.textContent='new';
-countDown.id='countDown';
 
-let mainDiv = document.createElement('div');
-mainDiv.classList.add('main-div')
+function initBoardWithPieces()
+{
+    let board = [ 
+        ['wR','wN','wB','wQ','wK','wB','wN','wR'],
+        ['wP','wP','wP','wP','wP','wP','wP','wP'],
+        ['  ','  ','  ','  ','  ','  ','  ','  '],
+        ['  ','  ','  ','  ','  ','  ','  ','  '],
+        ['  ','  ','  ','  ','  ','  ','  ','  '],
+        ['  ','  ','  ','  ','  ','  ','  ','  '],
+        ['bP','bP','bP','bP','bP','bP','bP','bP'],
+        ['bR','bN','bB','bQ','bK','bB','bN','bR'] ]
+      
+      return board;
 
-let seconds=5;
-
-let body = document.getElementsByTagName('body')[0].appendChild(mainDiv);
-mainDiv.appendChild(countDown);
-
-function Decrement(){
-    countDown.textContent=seconds;
-    seconds--;
-    if(seconds>=0){
-        setTimeout('Decrement()',1000);
-    }
-    else{
-        addChessTableToDiv(mainDiv);
-    }
-}
-
-
-function addChessTableToDiv(container){
-    
-    let gridDiv=document.createElement('div');
-    gridDiv.id="grid-div";
-    gridDiv.classList.add('grid-div');
-    container.appendChild(gridDiv);
-
-    countDown.parentNode.removeChild(countDown);
-    for(let i=0;i<8;i++){
-        for(let j=0;j<8;j++){
-            let createdDiv = document.createElement('div');
-            gridDiv.appendChild(createdDiv);
-            if((i+j)%2==0){
-                createdDiv.classList.add('white-div')
-            }
-            else{
-                createdDiv.classList.add('black-div')
-                let queen=new whiteQueen();
-                createdDiv.innerHTML=queen.img;
-            }
-        }
-    }
-}
-
-function addPiece(container,piece){
 
     
 }
 
+function movePiece(board)
+{
+    // Move King's Pawn forward 2
+    board[4][4] = board[6][4];
+    board[6][4] = '  ';
+    return board;
+}
+
+
+let board=initBoardWithPieces();
+console.log(board.join('\n'));
+movePiece(board);
+console.log(board.join('\n'));
 
