@@ -52,3 +52,33 @@ img:hover{
     grid-gap: 0px;
     
   }
+
+
+  #show-Pieces-btn {
+      margin-top: 30px;
+      box-shadow:inset 0px 1px 0px 0px #ffffff;
+      background:linear-gradient(to bottom, #ededed 5%, #b0a9b0 100%);
+      background-color:#ededed;
+      border-radius:6px;
+      border:1px solid #ede1ed;
+      display:inline-block;
+      cursor:pointer;
+      color:#261b26;
+      font-family:Verdana;
+      font-size:15px;
+      font-weight:bold;
+      padding:6px 46px;
+      text-decoration:none;
+      text-shadow:1px 1px 14px #ffffff;
+      width: auto;
+      text-align: left;
+  }
+  #show-Pieces-btn:hover {
+      background:linear-gradient(to bottom, #b0a9b0 5%, #ededed 100%);
+      background-color:#b0a9b0;
+  }
+ #show-Pieces-btn:active {
+      position:relative;
+      top:1px;
+  }
+  

@@ -1,0 +1,6 @@
+
+
+
+function showPieces() {
+    emptyBoard.addPieces();
+}

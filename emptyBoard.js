@@ -20,12 +20,10 @@ class gridTable
             ['  ','  ','  ','  ','  ','  ','  ','  '],
             ['bP','bP','bP','bP','bP','bP','bP','bP'],
             ['bR','bN','bB','bQ','bK','bB','bN','bR'] ];
-    
-       
-       
-       
+            
     }
     
+
     initSquareMatrix()
     {
         this.squaresMatrix = [];
@@ -54,22 +52,36 @@ class gridTable
                 this.squaresMatrix[i][j] = createdDiv;
             }
         }
+        let startDiv=document.createElement('div');
+        this.container.appendChild(startDiv);
+        
+        let showPiecesBTN=document.createElement('a');
+        showPiecesBTN.id="show-Pieces-btn";
+        showPiecesBTN.href='#';
+        showPiecesBTN.innerHTML="START";
+        showPiecesBTN.addEventListener("click", showPieces);;
+        startDiv.appendChild(showPiecesBTN);
+
+        
     }
 
  
     addPieces()
     {
-       
+     
         for(let i=0;i<8;i++)
             for(let j=0;j<8;j++)
             {
                 if(this.currentState[i][j]!="  ")
                 {
+                    
                     let newPiece=new piece();
                     newPiece=putPieceInSquare(this.currentState[i][j],this.gridDiv);
                     emptyBoard.squaresMatrix[i][j].appendChild(newPiece.img);
                 }
                
             }
+            let btn=document.getElementById("show-Pieces-btn");
+            btn.parentNode.removeChild(btn);
     }
 }
