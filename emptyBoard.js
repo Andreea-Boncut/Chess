@@ -104,8 +104,9 @@ class gridTable
 
         console.log("to");
         console.log(moveTo);
-     
-        if(moveTo.children.length>0)
+        if(moveFrom.children.length>0)
+        {
+            if(moveTo.children.length>0)
         {
             moveTo.removeChild(moveTo.childNodes[0]);
             moveTo.appendChild(moveFrom.childNodes[0]);
@@ -114,13 +115,30 @@ class gridTable
         {
             moveTo.appendChild(moveFrom.childNodes[0]);
         }
-        
-      
+        this.from_i = moveFrom.getAttribute('data-i')
+        this.from_j = moveFrom.getAttribute('data-j')
+        this.to_i = moveTo.getAttribute('data-i')
+        this.to_j = moveTo.getAttribute('data-j')
 
+       
+       
+        this.updateCurrentState();
+        console.log(this.currentState.join('\n'));
+        }
+        
+        
         
     }
        
-   
+    updateCurrentState()
+    {
+    // Move King's Pawn forward 2
+    this.currentState[this.to_i][this.to_j] = this.currentState[this.from_i][this.from_j];
+    this.currentState[this.from_i][this.from_j]= '  ';
+    
+    console.log("move from i="+this.from_i+", j="+this.from_j+"to i="+this.to_i+", j="+this.to_j)
+    }
+
     removePiece(){
 
         this.createdDiv.removeChild(this.createdDiv.childNodes[0]);
