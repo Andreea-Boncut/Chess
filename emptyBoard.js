@@ -20,17 +20,21 @@ class gridTable
             ['  ','  ','  ','  ','  ','  ','  ','  '],
             ['bP','bP','bP','bP','bP','bP','bP','bP'],
             ['bR','bN','bB','bQ','bK','bB','bN','bR'] ];
-            
+        this.moveFrom=null;
+        this.moveTo=null;
     }
     
 
     initSquareMatrix()
     {
         this.squaresMatrix = [];
+        this.piece = []
         for (let i = 0; i < 8; i++) {
             this.squaresMatrix[i] = [];
+            this.piece[i] = []
             for (let j = 0; j < 8; j++) {
                 this.squaresMatrix[i][j] = null;
+                this.piece[i][j] = null;
             }
         }
     }
@@ -40,16 +44,45 @@ class gridTable
         countDown.parentNode.removeChild(countDown);
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
-                let createdDiv = document.createElement('div');
-                this.gridDiv.appendChild(createdDiv);
+                this.createdDiv = document.createElement('div');
+                this.gridDiv.appendChild(this.createdDiv);
                 if((i+j)%2==0){
-                    createdDiv.classList.add('white-div');
+                    this.createdDiv.classList.add('white-div');
                 }
                 else{
-                    createdDiv.classList.add('black-div');
+                    this.createdDiv.classList.add('black-div');
                     
                 }
-                this.squaresMatrix[i][j] = createdDiv;
+                this.createdDiv.setAttribute('data-i', i)
+
+                this.createdDiv.setAttribute('data-j', j)
+                this.createdDiv.tabIndex=i+j;
+
+                this.squaresMatrix[i][j] = this.createdDiv;
+
+                this.createdDiv.addEventListener('click', (event)=> {
+
+                    console.log(event.currentTarget)
+
+                    if(this.moveFrom==null){
+                        this.moveFrom=this.squaresMatrix[i][j]
+                        this.moveTo=null;
+                       
+                    }
+                    else{
+                        this.moveTo=this.squaresMatrix[i][j]
+                       
+                        this.movePiece(this.moveFrom,this.moveTo);
+                       
+                       this.moveFrom=null;
+                       this.moveTo=null;
+                       return;
+                        
+                    }
+                    
+
+                })
+                
             }
         }
         let startDiv=document.createElement('div');
@@ -61,8 +94,37 @@ class gridTable
         showPiecesBTN.innerHTML="START";
         showPiecesBTN.addEventListener("click", showPieces);;
         startDiv.appendChild(showPiecesBTN);
+    }
+
+
+    movePiece(moveFrom,moveTo)
+    {
+        console.log("from");
+        console.log(moveFrom);
+
+        console.log("to");
+        console.log(moveTo);
+     
+        if(moveTo.children.length>0)
+        {
+            moveTo.removeChild(moveTo.childNodes[0]);
+            moveTo.appendChild(moveFrom.childNodes[0]);
+        }
+        else
+        {
+            moveTo.appendChild(moveFrom.childNodes[0]);
+        }
+        
+      
 
         
+    }
+       
+   
+    removePiece(){
+
+        this.createdDiv.removeChild(this.createdDiv.childNodes[0]);
+
     }
 
  

@@ -6,7 +6,10 @@
 
 
 }
-
+div:focus{
+    background-color: grey;
+    border-color: black;
+}
 .main-div p{
  
     padding-top:15%;
@@ -40,9 +43,7 @@
     box-shadow: 0 0 0 3px black;
   }
 
-img:hover{
-    width:105%;
-}
+
 .grid-div{
    
     padding-top:1.5%;
@@ -55,7 +56,7 @@ img:hover{
 
 
   #show-Pieces-btn {
-      margin-top: 30px;
+      margin-top: 5px;
       box-shadow:inset 0px 1px 0px 0px #ffffff;
       background:linear-gradient(to bottom, #ededed 5%, #b0a9b0 100%);
       background-color:#ededed;
