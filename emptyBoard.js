@@ -56,7 +56,7 @@ class gridTable
                 this.createdDiv.setAttribute('data-i', i)
 
                 this.createdDiv.setAttribute('data-j', j)
-                this.createdDiv.tabIndex=i+j;
+                this.createdDiv.tabIndex=1;
 
                 this.squaresMatrix[i][j] = this.createdDiv;
 
