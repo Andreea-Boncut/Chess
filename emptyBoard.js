@@ -1,7 +1,15 @@
 
 class gridTable
 {
-    
+    static currentState=[ 
+        ['wR','wN','wB','wQ','wK','wB','wN','wR'],
+        ['wP','wP','wP','wP','wP','wP','wP','wP'],
+        ['  ','  ','  ','  ','  ','  ','  ','  '],
+        ['  ','  ','  ','  ','  ','  ','  ','  '],
+        ['  ','  ','  ','  ','  ','  ','  ','  '],
+        ['  ','  ','  ','  ','  ','  ','  ','  '],
+        ['bP','bP','bP','bP','bP','bP','bP','bP'],
+        ['bR','bN','bB','bQ','bK','bB','bN','bR'] ];
     constructor (container){
         
         this.container=container;
@@ -11,15 +19,6 @@ class gridTable
         this.container.appendChild(this.gridDiv);
         this.initSquareMatrix();
         this.createSquares();
-        this.currentState=[ 
-            ['wR','wN','wB','wQ','wK','wB','wN','wR'],
-            ['wP','wP','wP','wP','wP','wP','wP','wP'],
-            ['  ','  ','  ','  ','  ','  ','  ','  '],
-            ['  ','  ','  ','  ','  ','  ','  ','  '],
-            ['  ','  ','  ','  ','  ','  ','  ','  '],
-            ['  ','  ','  ','  ','  ','  ','  ','  '],
-            ['bP','bP','bP','bP','bP','bP','bP','bP'],
-            ['bR','bN','bB','bQ','bK','bB','bN','bR'] ];
         this.moveFrom=null;
         this.moveTo=null;
     }
@@ -44,42 +43,40 @@ class gridTable
         countDown.parentNode.removeChild(countDown);
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
-                this.createdDiv = document.createElement('div');
-                this.gridDiv.appendChild(this.createdDiv);
-                if((i+j)%2==0){
-                    this.createdDiv.classList.add('white-div');
-                }
-                else{
-                    this.createdDiv.classList.add('black-div');
-                    
-                }
-                this.createdDiv.setAttribute('data-i', i)
-
-                this.createdDiv.setAttribute('data-j', j)
-                this.createdDiv.tabIndex=1;
-
-                this.squaresMatrix[i][j] = this.createdDiv;
-
-                this.createdDiv.addEventListener('click', (event)=> {
+                this.createdDiv = new Square(i,j);
+                this.gridDiv.appendChild(this.createdDiv.elem);
+                this.squaresMatrix[i][j]=this.createdDiv;
+               
+                this.squaresMatrix[i][j].elem.addEventListener('click', (event)=> {
 
                     console.log(event.currentTarget)
 
-                    if(this.moveFrom==null){
-                        this.moveFrom=this.squaresMatrix[i][j]
-                        this.moveTo=null;
-                       
+                    if (this.moveFrom == null) {
+                        if (this.squaresMatrix[i][j] != null) {
+                            this.moveFrom = this.squaresMatrix[i][j];
+                            console.log("From: "+this.moveFrom );
+                        }
                     }
-                    else{
-                        this.moveTo=this.squaresMatrix[i][j]
-                       
-                        this.movePiece(this.moveFrom,this.moveTo);
-                       
-                       this.moveFrom=null;
-                       this.moveTo=null;
-                       return;
-                        
+                    else {
+                        this.moveTo = this.squaresMatrix[i][j];
+                        console.log("To: "+this.moveTo);
+                        if (this.moveFrom.piece.legalMove(this.moveFrom.xCoord, this.moveFrom.yCoord,
+                            this.moveTo.xCoord, this.moveTo.yCoord, this.squaresMatrix)) {
+
+                            if (this.moveTo.piece != null) {
+                                console.log('entered to remove piece in battle');
+                                console.log(this.moveTo.piece);
+                                console.log(this.moveTo.removePiece());
+                            }
+
+                            this.moveTo.setPiece(this.moveFrom.removePiece());
+
+                        }
+                        this.moveTo.elem.blur();
+                        this.moveFrom = null;
+                        this.moveTo = null;
+
                     }
-                    
 
                 })
                 
@@ -87,7 +84,6 @@ class gridTable
         }
         let startDiv=document.createElement('div');
         this.container.appendChild(startDiv);
-        
         let showPiecesBTN=document.createElement('a');
         showPiecesBTN.id="show-Pieces-btn";
         showPiecesBTN.href='#';
@@ -123,7 +119,7 @@ class gridTable
        
        
         this.updateCurrentState();
-        console.log(this.currentState.join('\n'));
+        console.log(gridTable.currentState.join('\n'));
         }
         
         
@@ -133,8 +129,8 @@ class gridTable
     updateCurrentState()
     {
     // Move King's Pawn forward 2
-    this.currentState[this.to_i][this.to_j] = this.currentState[this.from_i][this.from_j];
-    this.currentState[this.from_i][this.from_j]= '  ';
+    gridTable.currentState[this.to_i][this.to_j] = gridTable.currentState[this.from_i][this.from_j];
+    gridTable.currentState[this.from_i][this.from_j]= '  ';
     
     console.log("move from i="+this.from_i+", j="+this.from_j+"to i="+this.to_i+", j="+this.to_j)
     }
@@ -145,23 +141,29 @@ class gridTable
 
     }
 
+    setPiece(piece) {
+        if (piece != null && piece != undefined) {
+            this.piece = piece;
+            this.elem.appendChild(piece.elem);
+            console.log(piece.elem + " " + this.xCoord + " " + this.yCoord);
+        }
+    }
  
     addPieces()
     {
-     
-        for(let i=0;i<8;i++)
-            for(let j=0;j<8;j++)
-            {
-                if(this.currentState[i][j]!="  ")
-                {
-                    
-                    let newPiece=new piece();
-                    newPiece=putPieceInSquare(this.currentState[i][j],this.gridDiv);
-                    emptyBoard.squaresMatrix[i][j].appendChild(newPiece.img);
+         
+                for (let i = 0; i < 8; i++) {
+                    for (let j = 0; j < 8; j++) {
+                        let actualPiece = piece.putPieceInSquare(gridTable.currentState[i][j],this.gridDiv);
+                        this.squaresMatrix[i][j].setPiece(actualPiece);
+                    }
                 }
-               
-            }
+            
             let btn=document.getElementById("show-Pieces-btn");
             btn.parentNode.removeChild(btn);
     }
+
+
 }
+////////////////////////////////
+
