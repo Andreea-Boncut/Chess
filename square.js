@@ -2,7 +2,7 @@ class Square {
     constructor(xCoord = null, yCoord = null) {
         this.xCoord = xCoord;
         this.yCoord = yCoord;
-        this.piece = piece;
+        this.piece = null;
         this.$elem = $('<div>');
         this.setDivColor();
         this.$elem.attr("tabIndex","1");
@@ -28,13 +28,12 @@ class Square {
 
     removePiece() {
         if (this.$elem.children(":first")) {
-            //let toRemove = this.$elem.removeChild(this.$elem.childNodes[0]);
+            let toRemove = this.$elem.find(':first-child').remove();
             let valToRet = this.piece;
             this.piece = null;
             return valToRet;
         }
         else return null;
     }
-
 
 }

@@ -2,14 +2,15 @@
 class gridTable
 {
     static currentState=[ 
-        ['wR','wN','wB','wQ','wK','wB','wN','wR'],
-        ['wP','wP','wP','wP','wP','wP','wP','wP'],
-        ['  ','  ','  ','  ','  ','  ','  ','  '],
-        ['  ','  ','  ','  ','  ','  ','  ','  '],
-        ['  ','  ','  ','  ','  ','  ','  ','  '],
-        ['  ','  ','  ','  ','  ','  ','  ','  '],
+       
+        ['bR','bN','bB','bQ','bK','bB','bN','bR'], 
         ['bP','bP','bP','bP','bP','bP','bP','bP'],
-        ['bR','bN','bB','bQ','bK','bB','bN','bR'] ];
+        ['  ','  ','  ','  ','  ','  ','  ','  '],
+        ['  ','  ','  ','  ','  ','  ','  ','  '],
+        ['  ','  ','  ','  ','  ','  ','  ','  '],
+        ['  ','  ','  ','  ','  ','  ','  ','  '],
+        ['wP','wP','wP','wP','wP','wP','wP','wP'], 
+        ['wR','wN','wB','wQ','wK','wB','wN','wR']];
 
     constructor (container){
         
@@ -48,34 +49,35 @@ class gridTable
                 this.createdDiv = new Square(i,j);
                 this.$gridDiv.append(this.createdDiv.$elem);
                 this.squaresMatrix[i][j]=this.createdDiv;
-                this.squaresMatrix[i][j].$elem.on('click',(event) => {
-                  
-            if (this.moveFrom == null) {
-                if (this.squaresMatrix[i][j] != null) {
-                    this.moveFrom = this.squaresMatrix[i][j];
-                   
-                }
-            }
-            else {
-                this.moveTo = this.squaresMatrix[i][j];
-               console.log("from: "+this.moveFrom+" to: "+this.moveTo);
-                if (true) {
 
-                    if (this.moveTo.piece != null) {
-                      
-                        this.moveTo.removePiece();
-                    }
 
-                    this.moveTo.setPiece(this.moveFrom.removePiece());
+                this.squaresMatrix[i][j].$elem.on('click',(event) => {     
+                        if (this.moveFrom == null) {
+                            if (this.squaresMatrix[i][j] != null) {
+                                this.moveFrom = this.squaresMatrix[i][j];
+                            }
+                        }
+                        else {
+                            this.moveTo = this.squaresMatrix[i][j];
+                        console.log("from: "+this.moveFrom+" to: "+this.moveTo);
+                            if (this.moveFrom.piece.legalMove(this.moveFrom.xCoord, this.moveFrom.yCoord,
+                                this.moveTo.xCoord, this.moveTo.yCoord, this.squaresMatrix)) {
 
-                }
-                this.moveTo.$elem.blur();
-                this.moveFrom = null;
-                this.moveTo = null;
+                                if (this.moveTo.piece != null) {
+                                
+                                    this.moveTo.removePiece();
+                                }
 
-            }
+                                this.moveTo.setPiece(this.moveFrom.removePiece());
 
-                    })
+                            }
+                            this.moveTo.$elem.blur();
+                            this.moveFrom = null;
+                            this.moveTo = null;
+
+                        }
+
+                                })
                 }
                 
                 
@@ -86,7 +88,7 @@ class gridTable
 
     
    
-    movePiece(moveFrom,moveTo)
+   /* movePiece(moveFrom,moveTo)
     {
         console.log("from");
         console.log(moveFrom);
@@ -118,7 +120,7 @@ class gridTable
         
         
     }
-       
+       */
     updateCurrentState()
     {
     // Move King's Pawn forward 2

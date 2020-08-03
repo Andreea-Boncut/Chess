@@ -1,11 +1,12 @@
 
 class piece {
-    static firstWhiteMove = true;
-    static firstBlackMove = true;
+   
     constructor(board, color) {
         this.board = board
         this.color = color;
         this.$elem = $('<img>');
+        this.firstWhiteMove = true;
+        this.firstBlackMove = true;
        
     }
     legalMove(initialX, initialY, toX, toY, state) {
@@ -73,6 +74,13 @@ class Queen extends piece {
       
    
 }
+
+legalMove(initialX, initialY, toX, toY, state){
+    console.log("from: x="+ initialX + ' y=' + initialY + ' to: x=' + toX + ' y=' + toY);
+
+    return Bishop.bishopLegalMove(initialX, initialY, toX, toY, state) || Rook.towerLegalMove(initialX, initialY, toX, toY, state);
+
+}
 }
 
 
@@ -89,10 +97,33 @@ class King extends piece {
         {
             this.$elem.attr("src","img/bK.png");
         }
-      
-     
-        
-   
+       
+}
+
+legalMove(initialX, initialY, toX, toY, state){
+    console.log("from: x="+ initialX + ' y=' + initialY + ' to: x=' + toX + ' y=' + toY);
+
+    if((initialX==toX && Math.abs(toY-initialY)==1) || (initialY==toY && Math.abs(toX-initialX)==1)){
+        if(state[toX][toY].piece==null){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    if(Math.abs(toX-initialX)==1 && Math.abs(toY-initialY)==1){
+        if(state[toX][toY].piece!=null){
+            if(state[toX][toY].piece.color!=state[initialX][initialY].piece.color){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return true;
+        }
+    }
 }
    
    
@@ -111,51 +142,43 @@ class Rook extends piece {
         {
             this.$elem.attr("src","img/bR.png");
         }
-     
         
    
 }
 legalMove(initialX, initialY, toX, toY, state) {
-    
-    //daca se muta in acelasi patrat
+
+    return this.constructor.towerLegalMove(initialX, initialY, toX, toY, state)
+
+}
+
+static towerLegalMove(initialX, initialY, toX, toY, state){
+    console.log("from: x="+ initialX + ' y=' + initialY + ' to: x=' + toX + ' y=' + toY);
+
     if (initialX == toX && initialY == toY) {
-        console.log("Nu se poate muta tura");
         return false;
     }
-
-    //daca unde se va muta piesa exista o alta piesa si daca piesele au aceeasi culoare
-    if (state[toX][toY].piece != null && state[toX][toY].piece.color.toLowerCase() == state[initialX][initialY].piece.color.toLowerCase()) {
-        console.log("Nu se poate muta tura");
+    if (state[toX][toY].piece != null && state[toX][toY].piece.color == state[initialX][initialY].piece.color) {
         return false;
     }
-
-    //pana la patratu in care vreau sa ajung sa nu fie nicio alta piesa
     if (initialX == toX && initialY < toY) {
-        
+        //pana la patratu in care vreau sa ajung sa nu fie nicio alta piesa
         for (let i = initialY + 1; i < toY; i++) {
             if (state[initialX][i].piece != null) {
-                console.log("Nu se poate muta tura");
                 return false;
             }
         }
     }
-
-    //pana la patratu in care vreau sa ajung sa nu fie nicio alta piesa
     if (initialX == toX && initialY > toY) {
-        
+        //pana la patratu in care vreau sa ajung sa nu fie nicio alta piesa
         for (let i = toY + 1; i < initialY; i++) {
             if (state[initialX][i].piece != null) {
-                console.log("Nu se poate muta tura");
                 return false;
             }
         }
     }
-
-
     if (initialY == toY && initialX < toX) {
         for (let i = initialX + 1; i < toX; i++) {
             if (state[i][initialY].piece != null) {
-                console.log("Nu se poate muta tura");
                 return false;
             }
         }
@@ -163,12 +186,11 @@ legalMove(initialX, initialY, toX, toY, state) {
     if (initialY == toY && initialX > toX) {
         for (let i = toX + 1; i < initialX; i++) {
             if (state[i][initialY].piece != null) {
-                console.log("Nu se poate muta tura");
                 return false;
             }
         }
     }
-    
+
     return true;
 }
  
@@ -188,11 +210,68 @@ class Bishop extends piece {
         {
             this.$elem.attr("src","img/bB.png");
         }
-      
+    }
+        legalMove(initialX, initialY, toX, toY, state) {
+            return this.constructor.bishopLegalMove(initialX, initialY, toX, toY, state);
+        }
+    
+        static bishopLegalMove(initialX, initialY, toX, toY, state){
+            console.log("from: x="+ initialX + ' y=' + initialY + ' to: x=' + toX + ' y=' + toY);
+
+            if(initialX==toX && initialY==toY){
+                return false;
+            }
+            if (-toX + initialX == toY - initialY) {
+                if (initialX > toX) {
+                    for (let i = initialX-1,  j=initialY+1; i > toX; i--, j++) { //mergem pe diagonala
+                        if (state[i][j].piece != null) {
+                            return false;
+                        }
+                    }
+                }
+                else {
+    
+                    for (let i = toX - 1,  j=toY +1; i > initialX; i--, j++) {
+                        if (state[i][j].piece != null) {
+                            return false;
+                        }
+                    }
+    
+                }
+                if(state[toX][toY].piece!=null){
+                    if(state[initialX][initialY].piece.color==state[toX][toY].piece.color){
+                        return false;
+                    }
+                }
+                return true;
+            }
+            if (toX - initialX == toY - initialY) {
+                if(initialX>toX){
+                    for(let i=initialX-1, j=initialY-1;i>toX; i--, j--){
+                        if(state[i][j].piece!=null){
+                            return false;
+                        }
+                    }
+                }
+                else{
+                    for(let i=toX-1, j=toY-1; i>toX; i--, j--){
+                        if(state[i][j].piece!=null){
+                            return false;
+                        }
+                    }
+                }
+                if(state[toX][toY].piece!=null){
+                    if(state[initialX][initialY].piece.color==state[toX][toY].piece.color){
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
         
-        
-   
-}
    
 }
 
@@ -210,11 +289,33 @@ class Knight extends piece {
         {
             this.$elem.attr("src","img/bN.png");
         }
+    }
+
+        legalMove(initialX, initialY, toX, toY, state) {
+            console.log("from: x="+ initialX + ' y=' + initialY + ' to: x=' + toX + ' y=' + toY);
+
+            if ((Math.abs(initialY - toY) == 1 && Math.abs(initialX - toX) == 2) || (Math.abs(initialY - toY) == 2 && Math.abs(initialX - toX) == 1)) {
+                if (state[toX][toY].piece != null) {
+                    if (state[toX][toY].piece.color != state[initialX][initialY].piece.color) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else {
+                    return true;
+                }
+            }
+            else {
+                return false;
+            }
+        }
      
         
         
    
-}
+
 }
 
 
@@ -237,10 +338,13 @@ class Pawn extends piece {
         
    
 }
+
 legalMove(initialX, initialY, toX, toY, state) {
-    console.log(initialX + ' ' + initialY + ' ' + toX + ' ' + toY);
-    if (this.color.toLowerCase() == 'white') {
-        if (this.constructor.firstWhiteMove) {
+    console.log("from: x="+ initialX + ' y=' + initialY + ' to: x=' + toX + ' y=' + toY);
+
+    
+    if (this.color == 'white') {
+        if (this.firstWhiteMove) {
             if (toX - initialX != -1 && toX - initialX != -2) {
                 return false;
             }
@@ -271,11 +375,11 @@ legalMove(initialX, initialY, toX, toY, state) {
         }
 
 
-        this.constructor.firstWhiteMove = false;
+        this.firstWhiteMove = false;
         return true;
     }
     else { //black moves
-        if (this.constructor.firstBlackMove) {
+        if (this.firstBlackMove) {
             if (toX - initialX != 1 && toX - initialX != 2) {
                 return false;
             }
@@ -307,12 +411,15 @@ legalMove(initialX, initialY, toX, toY, state) {
         if (toY != initialY - 1 && toY != initialY && toY != initialY + 1) {
             return false;
         }
-        this.constructor.firstBlackMove = false;
+        this.firstBlackMove = false;
         return true;
     }
 }
-    
+
 }
+
+    
+
 
 
 
