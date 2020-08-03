@@ -2,5 +2,5 @@
 
 
 function showPieces() {
-    emptyBoard.addPieces();
+    $emptyBoard.addPieces();
 }

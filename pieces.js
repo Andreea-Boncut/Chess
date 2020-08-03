@@ -1,15 +1,11 @@
 
 class piece {
-
-   
-   
-
     static firstWhiteMove = true;
     static firstBlackMove = true;
     constructor(board, color) {
         this.board = board
         this.color = color;
-        this.elem = $('img');
+        this.$elem = $('<img>');
        
     }
     legalMove(initialX, initialY, toX, toY, state) {
@@ -67,17 +63,15 @@ class Queen extends piece {
         super(board,color);
         if(this.color=='white')
         {
-            this.elem.src ="img/wQ.png";
+            this.$elem.attr("src","img/wQ.png");
         }
         else
         if(this.color=='black')
         {
-            this.elem.src ="img/bQ.png";
+            this.$elem.attr("src","img/bQ.png");
         }
       
-      console.log(this.elem.src.toString())
-      console.log(this.color.toString());
-        
+   
 }
 }
 
@@ -88,17 +82,15 @@ class King extends piece {
         super(board,color);
         if(this.color=='white')
         {
-            this.elem.src ="img/wK.png";
+            this.$elem.attr("src","img/wK.png");
         }
         else
         if(this.color=='black')
         {
-            this.elem.src ="img/bK.png";
+            this.$elem.attr("src","img/bK.png");
         }
       
-      console.log(this.elem.src.toString())
-      console.log(this.color.toString());
-        
+     
         
    
 }
@@ -112,17 +104,14 @@ class Rook extends piece {
         super(board,color);
         if(this.color=='white')
         {
-            this.elem.src ="img/wR.png";
+            this.$elem.attr("src","img/wR.png");
         }
         else
         if(this.color==='black')
         {
-            this.elem.src ="img/bR.png";
+            this.$elem.attr("src","img/bR.png");
         }
-      
-      console.log(this.elem.src.toString())
-      console.log(this.color.toString());
-        
+     
         
    
 }
@@ -192,16 +181,14 @@ class Bishop extends piece {
         super(board,color);
         if(this.color=='white')
         {
-            this.elem.src ="img/wB.png";
+            this.$elem.attr("src","img/wB.png");
         }
         else
         if(this.color=='black')
         {
-            this.elem.src ="img/bB.png";
+            this.$elem.attr("src","img/bB.png");
         }
       
-      console.log(this.elem.src.toString())
-      console.log(this.color.toString());
         
         
    
@@ -216,16 +203,14 @@ class Knight extends piece {
         super(board,color);
         if(this.color=='white')
         {
-            this.elem.src ="img/wN.png";
+            this.$elem.attr("src","img/wN.png");
         }
         else
         if(this.color=='black')
         {
-            this.elem.src ="img/bN.png";
+            this.$elem.attr("src","img/bN.png");
         }
-      
-      console.log(this.elem.src.toString())
-      console.log(this.color.toString());
+     
         
         
    
@@ -240,17 +225,15 @@ class Pawn extends piece {
         super(board,color);
         if(this.color=='white')
         {
-            this.elem.src ="img/wP.png";
+            this.$elem.attr("src","img/wP.png");
         }
         else
         if(this.color=='black')
         {
-            this.elem.src ="img/bP.png";
+            this.$elem.attr("src","img/bP.png");
         }
       
-      console.log(this.elem.src.toString())
-      console.log(this.color.toString());
-        
+    
         
    
 }

@@ -3,7 +3,7 @@ class Square {
         this.xCoord = xCoord;
         this.yCoord = yCoord;
         this.piece = piece;
-        this.$elem = $('div');
+        this.$elem = $('<div>');
         this.setDivColor();
         this.$elem.attr("tabIndex","1");
 
@@ -21,7 +21,7 @@ class Square {
     setPiece(piece) {
         if (piece != null && piece != undefined) {
             this.piece = piece;
-            this.$elem.append(piece.elem);
+            this.$elem.append(piece.$elem);
            
         }
     }

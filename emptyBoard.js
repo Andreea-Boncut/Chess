@@ -10,7 +10,7 @@ class gridTable
         ['  ','  ','  ','  ','  ','  ','  ','  '],
         ['bP','bP','bP','bP','bP','bP','bP','bP'],
         ['bR','bN','bB','bQ','bK','bB','bN','bR'] ];
-        
+
     constructor (container){
         
         this.$container=container;
@@ -20,6 +20,7 @@ class gridTable
         this.$container.append(this.$gridDiv);
         this.initSquareMatrix();
         this.createSquares();
+        this.createBTN();
         this.moveFrom=null;
         this.moveTo=null;
     }
@@ -47,42 +48,22 @@ class gridTable
                 this.createdDiv = new Square(i,j);
                 this.$gridDiv.append(this.createdDiv.$elem);
                 this.squaresMatrix[i][j]=this.createdDiv;
-                this.squaresMatrix[i][j].$elem.click( this.moveFunction(event,i,j));
-                
-            }
-        }
-        let $startDiv=$('div');
-        this.$container.append($startDiv);//container=main div
-        let $showPiecesBTN=$('a');
-        $showPiecesBTN.attr("id","show-Pieces-btn");
-        $showPiecesBTN.attr('href','#');
-        $showPiecesBTN.html="START";
-        $showPiecesBTN.on("click", showPieces);;
-        $startDiv.append($showPiecesBTN);
-    }
-
-
-    moveFunction(event,i,j)
-    {
-       
-
-            //console.log(event.currentTarget)
-
+                this.squaresMatrix[i][j].$elem.on('click',(event) => {
+                  
             if (this.moveFrom == null) {
                 if (this.squaresMatrix[i][j] != null) {
                     this.moveFrom = this.squaresMatrix[i][j];
-                    console.log("From: "+this.moveFrom );
+                   
                 }
             }
             else {
                 this.moveTo = this.squaresMatrix[i][j];
-                console.log("To: "+this.moveTo);
+               console.log("from: "+this.moveFrom+" to: "+this.moveTo);
                 if (true) {
 
                     if (this.moveTo.piece != null) {
-                        console.log('entered to remove piece in battle');
-                        console.log(this.moveTo.piece);
-                        console.log(this.moveTo.removePiece());
+                      
+                        this.moveTo.removePiece();
                     }
 
                     this.moveTo.setPiece(this.moveFrom.removePiece());
@@ -94,8 +75,17 @@ class gridTable
 
             }
 
-        
-    }
+                    })
+                }
+                
+                
+            }
+        }
+       
+    
+
+    
+   
     movePiece(moveFrom,moveTo)
     {
         console.log("from");
@@ -147,8 +137,8 @@ class gridTable
     setPiece(piece) {
         if (piece != null && piece != undefined) {
             this.piece = piece;
-            this.elem.appendChild(piece.$elem);
-            console.log(piece.$elem + " " + this.xCoord + " " + this.yCoord);
+            this.$elem.append(piece.$elem);
+           
         }
     }
  
@@ -157,16 +147,35 @@ class gridTable
          
                 for (let i = 0; i < 8; i++) {
                     for (let j = 0; j < 8; j++) {
+                        
                         let actualPiece = piece.putPieceInSquare(gridTable.currentState[i][j],this.$gridDiv);
+                        
                         this.squaresMatrix[i][j].setPiece(actualPiece);
+                      
                     }
                 }
             
-            let btn=document.getElementById("show-Pieces-btn");
-            btn.parentNode.removeChild(btn);
+                this.deleteShowPiecesBTN();
+            
+    }
+
+    createBTN(){
+        let $startDiv=$('<div>');
+        this.$container.append($startDiv);//container=main div
+        let $showPiecesBTN=$('<a>');
+        $showPiecesBTN.attr("id","show-Pieces-btn");
+        $showPiecesBTN.attr('href','#');
+        $showPiecesBTN.html("START");
+        $showPiecesBTN.on("click", showPieces);;
+        $startDiv.append($showPiecesBTN);
     }
 
 
+    deleteShowPiecesBTN()
+    {
+        let btn=document.getElementById("show-Pieces-btn");
+        btn.parentNode.removeChild(btn);
+    }
 }
 ////////////////////////////////
 
