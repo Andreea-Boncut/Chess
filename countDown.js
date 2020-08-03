@@ -1,27 +1,25 @@
 
 
-let countDown = document.createElement('p'); 
-countDown.textContent='new';
-countDown.id='countDown';
+let $countDown = $('<p></p>'); 
+$countDown.attr('id','countDown');
 
-let mainDiv = document.createElement('div');
-mainDiv.classList.add('main-div')
+let $mainDiv = $('<div>');
+$mainDiv.addClass('main-div');
 
-let seconds=5;
+let seconds=2;
+$('body').append($mainDiv);
+$mainDiv.append($countDown);
 
-let body = document.getElementsByTagName('body')[0].appendChild(mainDiv);
-mainDiv.appendChild(countDown);
-
-let emptyBoard;
+let $emptyBoard;
 
 function Decrement(){
-    countDown.textContent=seconds;
+    $countDown.text(seconds);
     seconds--;
     if(seconds>=0){
         setTimeout('Decrement()',1000);
     }
     else{
-        emptyBoard=new gridTable(mainDiv)
+        $emptyBoard=new gridTable($mainDiv);
        
     }
 }

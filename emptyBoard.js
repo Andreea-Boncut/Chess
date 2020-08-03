@@ -10,13 +10,14 @@ class gridTable
         ['  ','  ','  ','  ','  ','  ','  ','  '],
         ['bP','bP','bP','bP','bP','bP','bP','bP'],
         ['bR','bN','bB','bQ','bK','bB','bN','bR'] ];
+        
     constructor (container){
         
-        this.container=container;
-        this.gridDiv=document.createElement('div');
-        this.gridDiv.id="grid-div";
-        this.gridDiv.classList.add('grid-div');
-        this.container.appendChild(this.gridDiv);
+        this.$container=container;
+        this.$gridDiv=$('<div></div>');
+        this.$gridDiv.attr('id','grid-div');
+        this.$gridDiv.addClass('grid-div');
+        this.$container.append(this.$gridDiv);
         this.initSquareMatrix();
         this.createSquares();
         this.moveFrom=null;
@@ -40,59 +41,61 @@ class gridTable
 
     createSquares()
     {
-        countDown.parentNode.removeChild(countDown);
+        $countDown.remove();
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
                 this.createdDiv = new Square(i,j);
-                this.gridDiv.appendChild(this.createdDiv.elem);
+                this.$gridDiv.append(this.createdDiv.$elem);
                 this.squaresMatrix[i][j]=this.createdDiv;
-               
-                this.squaresMatrix[i][j].elem.addEventListener('click', (event)=> {
-
-                    console.log(event.currentTarget)
-
-                    if (this.moveFrom == null) {
-                        if (this.squaresMatrix[i][j] != null) {
-                            this.moveFrom = this.squaresMatrix[i][j];
-                            console.log("From: "+this.moveFrom );
-                        }
-                    }
-                    else {
-                        this.moveTo = this.squaresMatrix[i][j];
-                        console.log("To: "+this.moveTo);
-                        if (this.moveFrom.piece.legalMove(this.moveFrom.xCoord, this.moveFrom.yCoord,
-                            this.moveTo.xCoord, this.moveTo.yCoord, this.squaresMatrix)) {
-
-                            if (this.moveTo.piece != null) {
-                                console.log('entered to remove piece in battle');
-                                console.log(this.moveTo.piece);
-                                console.log(this.moveTo.removePiece());
-                            }
-
-                            this.moveTo.setPiece(this.moveFrom.removePiece());
-
-                        }
-                        this.moveTo.elem.blur();
-                        this.moveFrom = null;
-                        this.moveTo = null;
-
-                    }
-
-                })
+                this.squaresMatrix[i][j].$elem.click( this.moveFunction(event,i,j));
                 
             }
         }
-        let startDiv=document.createElement('div');
-        this.container.appendChild(startDiv);
-        let showPiecesBTN=document.createElement('a');
-        showPiecesBTN.id="show-Pieces-btn";
-        showPiecesBTN.href='#';
-        showPiecesBTN.innerHTML="START";
-        showPiecesBTN.addEventListener("click", showPieces);;
-        startDiv.appendChild(showPiecesBTN);
+        let $startDiv=$('div');
+        this.$container.append($startDiv);//container=main div
+        let $showPiecesBTN=$('a');
+        $showPiecesBTN.attr("id","show-Pieces-btn");
+        $showPiecesBTN.attr('href','#');
+        $showPiecesBTN.html="START";
+        $showPiecesBTN.on("click", showPieces);;
+        $startDiv.append($showPiecesBTN);
     }
 
 
+    moveFunction(event,i,j)
+    {
+       
+
+            //console.log(event.currentTarget)
+
+            if (this.moveFrom == null) {
+                if (this.squaresMatrix[i][j] != null) {
+                    this.moveFrom = this.squaresMatrix[i][j];
+                    console.log("From: "+this.moveFrom );
+                }
+            }
+            else {
+                this.moveTo = this.squaresMatrix[i][j];
+                console.log("To: "+this.moveTo);
+                if (true) {
+
+                    if (this.moveTo.piece != null) {
+                        console.log('entered to remove piece in battle');
+                        console.log(this.moveTo.piece);
+                        console.log(this.moveTo.removePiece());
+                    }
+
+                    this.moveTo.setPiece(this.moveFrom.removePiece());
+
+                }
+                this.moveTo.$elem.blur();
+                this.moveFrom = null;
+                this.moveTo = null;
+
+            }
+
+        
+    }
     movePiece(moveFrom,moveTo)
     {
         console.log("from");
@@ -144,8 +147,8 @@ class gridTable
     setPiece(piece) {
         if (piece != null && piece != undefined) {
             this.piece = piece;
-            this.elem.appendChild(piece.elem);
-            console.log(piece.elem + " " + this.xCoord + " " + this.yCoord);
+            this.elem.appendChild(piece.$elem);
+            console.log(piece.$elem + " " + this.xCoord + " " + this.yCoord);
         }
     }
  
@@ -154,7 +157,7 @@ class gridTable
          
                 for (let i = 0; i < 8; i++) {
                     for (let j = 0; j < 8; j++) {
-                        let actualPiece = piece.putPieceInSquare(gridTable.currentState[i][j],this.gridDiv);
+                        let actualPiece = piece.putPieceInSquare(gridTable.currentState[i][j],this.$gridDiv);
                         this.squaresMatrix[i][j].setPiece(actualPiece);
                     }
                 }

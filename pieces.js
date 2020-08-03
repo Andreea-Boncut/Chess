@@ -9,7 +9,7 @@ class piece {
     constructor(board, color) {
         this.board = board
         this.color = color;
-        this.elem = document.createElement('img');
+        this.elem = $('img');
        
     }
     legalMove(initialX, initialY, toX, toY, state) {
