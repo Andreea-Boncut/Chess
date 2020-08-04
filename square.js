@@ -3,20 +3,29 @@ class Square {
         this.xCoord = xCoord;
         this.yCoord = yCoord;
         this.piece = null;
-        this.$elem = $('<div>');
-        this.setDivColor();
-        this.$elem.attr("tabIndex","1");
+        this.$elem=this.initDiv();
+        
 
     }
 
-    setDivColor()
+    initDiv()
     {
+        const $div=$('<div>');
+        $div.attr("tabIndex","1");
+        $div.addClass('square');
+       
+        $div.attr("data-i",this.xCoord);
+        $div.attr("data-j",this.yCoord);
         if ((this.xCoord + this.yCoord) % 2 == 0) {
-            this.$elem.addClass('white-div');
+            $div.addClass('white-div');
         }
         else {
-            this.$elem.addClass('black-div');
+            $div.addClass('black-div');
         }
+        $div.droppable({
+            accept: '#draggable'
+        });
+        return $div;
     }
     setPiece(piece) {
         if (piece != null && piece != undefined) {

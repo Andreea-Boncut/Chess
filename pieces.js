@@ -5,7 +5,11 @@ class piece {
     constructor(board, color) {
         this.board = board
         this.color = color;
-        this.$elem = $('<img>');
+        this.$elem = $('<img>').attr('id','draggable');
+        this.$elem.draggable({
+            revert: true,
+            revertDuration: 0
+        })
         this.firstWhiteMove = true;
         this.firstBlackMove = true;
        
@@ -78,7 +82,7 @@ class Queen extends piece {
 
 legalMove(initialX, initialY, toX, toY, state){
     console.log("from: x="+ initialX + ' y=' + initialY + ' to: x=' + toX + ' y=' + toY);
-
+   
     return Bishop.bishopLegalMove(initialX, initialY, toX, toY, state) || Rook.towerLegalMove(initialX, initialY, toX, toY, state);
 
 }
@@ -163,7 +167,7 @@ static towerLegalMove(initialX, initialY, toX, toY, state){
     }
     if (initialX == toX && initialY < toY) {
         //pana la patratu in care vreau sa ajung sa nu fie nicio alta piesa
-        for (let i = initialY + 1; i < toY; i++) {
+        for (let i = parseInt(initialY) + 1; i < toY; i++) {
             if (state[initialX][i].piece != null) {
                 return false;
             }
@@ -171,21 +175,21 @@ static towerLegalMove(initialX, initialY, toX, toY, state){
     }
     if (initialX == toX && initialY > toY) {
         //pana la patratu in care vreau sa ajung sa nu fie nicio alta piesa
-        for (let i = toY + 1; i < initialY; i++) {
+        for (let i = parseInt(toY) + 1; i < initialY; i++) {
             if (state[initialX][i].piece != null) {
                 return false;
             }
         }
     }
     if (initialY == toY && initialX < toX) {
-        for (let i = initialX + 1; i < toX; i++) {
+        for (let i = parseInt(initialX) + 1; i < toX; i++) {
             if (state[i][initialY].piece != null) {
                 return false;
             }
         }
     }
     if (initialY == toY && initialX > toX) {
-        for (let i = toX + 1; i < initialX; i++) {
+        for (let i = parseInt(toX) + 1; i < initialX; i++) {
             if (state[i][initialY].piece != null) {
                 return false;
             }
@@ -224,7 +228,7 @@ class Bishop extends piece {
             }
             if (-toX + initialX == toY - initialY) {
                 if (initialX > toX) {
-                    for (let i = initialX-1,  j=initialY+1; i > toX; i--, j++) { //mergem pe diagonala
+                    for (let i = parseInt(initialX)-1,  j=parseInt(initialY)+1; i > toX; i--, j++) { //mergem pe diagonala
                         if (state[i][j].piece != null) {
                             return false;
                         }
@@ -232,7 +236,7 @@ class Bishop extends piece {
                 }
                 else {
     
-                    for (let i = toX - 1,  j=toY +1; i > initialX; i--, j++) {
+                    for (let i = parseInt(toX) - 1,  j=parseInt(toY) +1; i > initialX; i--, j++) {
                         if (state[i][j].piece != null) {
                             return false;
                         }
@@ -248,14 +252,14 @@ class Bishop extends piece {
             }
             if (toX - initialX == toY - initialY) {
                 if(initialX>toX){
-                    for(let i=initialX-1, j=initialY-1;i>toX; i--, j--){
+                    for(let i=parseInt(initialX)-1, j=parseInt(initialY)-1;i>toX; i--, j--){
                         if(state[i][j].piece!=null){
                             return false;
                         }
                     }
                 }
                 else{
-                    for(let i=toX-1, j=toY-1; i>toX; i--, j--){
+                    for(let i=parseInt(toX)-1, j=parseInt(toY)-1; i>toX; i--, j--){
                         if(state[i][j].piece!=null){
                             return false;
                         }
@@ -298,7 +302,9 @@ class Knight extends piece {
             if ((Math.abs(initialY - toY) == 1 && Math.abs(initialX - toX) == 2) || (Math.abs(initialY - toY) == 2 && Math.abs(initialX - toX) == 1)) {
                 if (state[toX][toY].piece != null) {
                     if (state[toX][toY].piece.color != state[initialX][initialY].piece.color) {
+                      
                         return true;
+                        
                     }
                     else {
                         return false;
@@ -375,7 +381,7 @@ legalMove(initialX, initialY, toX, toY, state) {
             }
         }
 
-        piece.round='black';
+       
         this.firstWhiteMove = false;
         return true;
     }
@@ -412,7 +418,7 @@ legalMove(initialX, initialY, toX, toY, state) {
         if (toY != initialY - 1 && toY != initialY && toY != initialY + 1) {
             return false;
         }
-        piece.round='white';
+      
         this.firstBlackMove = false;
         return true;
     }

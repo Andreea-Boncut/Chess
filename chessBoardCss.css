@@ -83,3 +83,12 @@ div:focus{
       top:1px;
   }
   
+  
+  .draggable {
+    
+       cursor: -webkit-grab;
+       cursor: grab;
+    }
+  .droppable { 
+    
+    }

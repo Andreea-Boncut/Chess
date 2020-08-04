@@ -50,70 +50,75 @@ class gridTable
                 this.createdDiv = new Square(i,j);
                 this.$gridDiv.append(this.createdDiv.$elem);
                 this.squaresMatrix[i][j]=this.createdDiv;
-
-
-                this.squaresMatrix[i][j].$elem.on('click',(event) => {     
-                        if (this.moveFrom == null) {
-                            if (this.squaresMatrix[i][j] != null) {
-                                this.moveFrom = this.squaresMatrix[i][j];
-                            }
-                        }
-                        else {
-                            this.moveTo = this.squaresMatrix[i][j];
-                        console.log("from: "+this.moveFrom+" to: "+this.moveTo);
-                        if(this.moveFrom.piece!=null)
-                        {
-                        if(this.moveFrom.piece.color==piece.round){
-
-                        
-                            if (this.moveFrom.piece.legalMove(this.moveFrom.xCoord, this.moveFrom.yCoord,
-                                this.moveTo.xCoord, this.moveTo.yCoord, this.squaresMatrix)) {
-
-                                if (this.moveTo.piece != null) {
-                                
-                                    this.moveTo.removePiece();
-                                }
-
-                                this.moveTo.setPiece(this.moveFrom.removePiece());
-
-                            }
-                        }
-                            
-                    }
-                            this.moveTo.$elem.blur();
-                            this.moveFrom = null;
-                            this.moveTo = null;
-                            this.deleteShowPiecesBTN();
-                        }
-
-                                })
+               
                 }
-                
-                
             }
-        }
+            $(document).on('click dragstart drop', '.square', this.squareListenerFunction.bind(this)); 
+        } 
        
+        squareListenerFunction(event)
+        {     
+            const i = event.currentTarget.getAttribute('data-i');
+            const j = event.currentTarget.getAttribute('data-j');
+
+            if (this.moveFrom == null) {
+                if (this.squaresMatrix[i][j] != null) {
+                    this.moveFrom = this.squaresMatrix[i][j];
+                    this.fromI=i;
+                    this.fromJ=j;
+                }
+            }
+            else {
+                this.moveTo = this.squaresMatrix[i][j];
+                this.toI=i;
+                this.toJ=j;
+            console.log("from: "+this.moveFrom+" to: "+this.moveTo);
+            if(this.moveFrom.piece!=null)
+            {
+            if(this.moveFrom.piece.color==piece.round){
+
+            
+                if (this.moveFrom.piece.legalMove(this.fromI, this.fromJ,
+                    this.toI,  this.toJ, this.squaresMatrix)) {
+                        if(piece.round=="white")
+                        {
+                            piece.round="black";
+                        }
+                        else
+                        {
+                            piece.round="white";
+                        }
+                  
+                    this.moveTo.setPiece(this.moveFrom.piece);
+                    this.updateCurrentState();
+                                 }
+                        }
+                 }
+                this.moveTo.$elem.blur();
+                this.moveFrom = null;
+                this.moveTo = null;
+                this.changeShowPiecesBTN("ROUND: "+piece.round);
+     }
+  }
 
     updateCurrentState()
     {
     // Move King's Pawn forward 2
-    gridTable.currentState[this.to_i][this.to_j] = gridTable.currentState[this.from_i][this.from_j];
-    gridTable.currentState[this.from_i][this.from_j]= '  ';
+    gridTable.currentState[this.moveTo.xCoord][this.moveTo.yCoord] = gridTable.currentState[this.moveFrom.xCoord][this.moveFrom.yCoord];
+    gridTable.currentState[this.moveFrom.xCoord][this.moveFrom.yCoord]= '  ';
     
-    console.log("move from i="+this.from_i+", j="+this.from_j+"to i="+this.to_i+", j="+this.to_j)
+    console.log(gridTable.currentState.join("\n"));
     }
 
-    removePiece(){
-
-        this.createdDiv.removeChild(this.createdDiv.childNodes[0]);
-
-    }
-
-    setPiece(piece) {
-        if (piece != null && piece != undefined) {
-            this.piece = piece;
-            this.$elem.append(piece.$elem);
-           
+  
+    setPiece(piece = null) {
+        this.piece = piece;
+        if (this.$elem !== null && piece !== null) {
+            this.$elem.html(piece.$elem);
+        }
+        if (this.piece != null) {
+            this.piece.$elem.attr('data-i', this.xCoord);
+            this.piece.$elem.attr('data-j', this.yCoord);
         }
     }
  
@@ -130,7 +135,7 @@ class gridTable
                     }
                 }
             
-                this.deleteShowPiecesBTN();
+                this.changeShowPiecesBTN("ROUND: "+piece.round);
             
     }
 
@@ -146,10 +151,12 @@ class gridTable
     }
 
 
-    deleteShowPiecesBTN()
+    changeShowPiecesBTN(text)
     {
         let $btn=$("#show-Pieces-btn");
-        $btn.text("ROUND: "+piece.round);
+        $btn.off("click", showPieces);
+        
+        $btn.text(text);
     }
 }
 
