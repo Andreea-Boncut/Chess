@@ -1,6 +1,7 @@
 
 class piece {
    
+    static round='white';
     constructor(board, color) {
         this.board = board
         this.color = color;
@@ -341,9 +342,9 @@ class Pawn extends piece {
 
 legalMove(initialX, initialY, toX, toY, state) {
     console.log("from: x="+ initialX + ' y=' + initialY + ' to: x=' + toX + ' y=' + toY);
-
     
-    if (this.color == 'white') {
+    
+    if (this.color == 'white' ) {
         if (this.firstWhiteMove) {
             if (toX - initialX != -1 && toX - initialX != -2) {
                 return false;
@@ -374,11 +375,11 @@ legalMove(initialX, initialY, toX, toY, state) {
             }
         }
 
-
+        piece.round='black';
         this.firstWhiteMove = false;
         return true;
     }
-    else { //black moves
+    else if(this.color=='black'){ //black moves
         if (this.firstBlackMove) {
             if (toX - initialX != 1 && toX - initialX != 2) {
                 return false;
@@ -411,6 +412,7 @@ legalMove(initialX, initialY, toX, toY, state) {
         if (toY != initialY - 1 && toY != initialY && toY != initialY + 1) {
             return false;
         }
+        piece.round='white';
         this.firstBlackMove = false;
         return true;
     }

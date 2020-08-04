@@ -1,6 +1,7 @@
 
 class gridTable
 {
+
     static currentState=[ 
        
         ['bR','bN','bB','bQ','bK','bB','bN','bR'], 
@@ -60,6 +61,11 @@ class gridTable
                         else {
                             this.moveTo = this.squaresMatrix[i][j];
                         console.log("from: "+this.moveFrom+" to: "+this.moveTo);
+                        if(this.moveFrom.piece!=null)
+                        {
+                        if(this.moveFrom.piece.color==piece.round){
+
+                        
                             if (this.moveFrom.piece.legalMove(this.moveFrom.xCoord, this.moveFrom.yCoord,
                                 this.moveTo.xCoord, this.moveTo.yCoord, this.squaresMatrix)) {
 
@@ -71,10 +77,13 @@ class gridTable
                                 this.moveTo.setPiece(this.moveFrom.removePiece());
 
                             }
+                        }
+                            
+                    }
                             this.moveTo.$elem.blur();
                             this.moveFrom = null;
                             this.moveTo = null;
-
+                            this.deleteShowPiecesBTN();
                         }
 
                                 })
@@ -84,43 +93,7 @@ class gridTable
             }
         }
        
-    
 
-    
-   
-   /* movePiece(moveFrom,moveTo)
-    {
-        console.log("from");
-        console.log(moveFrom);
-
-        console.log("to");
-        console.log(moveTo);
-        if(moveFrom.children.length>0)
-        {
-            if(moveTo.children.length>0)
-        {
-            moveTo.removeChild(moveTo.childNodes[0]);
-            moveTo.appendChild(moveFrom.childNodes[0]);
-        }
-        else
-        {
-            moveTo.appendChild(moveFrom.childNodes[0]);
-        }
-        this.from_i = moveFrom.getAttribute('data-i')
-        this.from_j = moveFrom.getAttribute('data-j')
-        this.to_i = moveTo.getAttribute('data-i')
-        this.to_j = moveTo.getAttribute('data-j')
-
-       
-       
-        this.updateCurrentState();
-        console.log(gridTable.currentState.join('\n'));
-        }
-        
-        
-        
-    }
-       */
     updateCurrentState()
     {
     // Move King's Pawn forward 2
@@ -168,16 +141,16 @@ class gridTable
         $showPiecesBTN.attr("id","show-Pieces-btn");
         $showPiecesBTN.attr('href','#');
         $showPiecesBTN.html("START");
-        $showPiecesBTN.on("click", showPieces);;
+        $showPiecesBTN.on("click", showPieces);
         $startDiv.append($showPiecesBTN);
     }
 
 
     deleteShowPiecesBTN()
     {
-        let btn=document.getElementById("show-Pieces-btn");
-        btn.parentNode.removeChild(btn);
+        let $btn=$("#show-Pieces-btn");
+        $btn.text("ROUND: "+piece.round);
     }
 }
-////////////////////////////////
+
 
