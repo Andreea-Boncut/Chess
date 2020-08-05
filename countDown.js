@@ -19,7 +19,7 @@ function Decrement(){
         setTimeout('Decrement()',1000);
     }
     else{
-        $emptyBoard=new gridTable($mainDiv);
+        $emptyBoard=new Board($mainDiv);
        
     }
 }

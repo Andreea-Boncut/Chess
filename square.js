@@ -35,6 +35,13 @@ class Square {
         }
     }
 
+    setPiece2(piece = null) {
+        this.piece = piece;
+        if (this.$elem !== null && piece !== null) {
+            this.$elem.html(piece.$elem);
+        }
+    }
+
     removePiece() {
         if (this.$elem.children(":first")) {
             let toRemove = this.$elem.find(':first-child').remove();
