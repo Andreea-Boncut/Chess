@@ -22,5 +22,10 @@ function Decrement(){
         $emptyBoard=new Board($mainDiv);
        
     }
+
+    
 }
+
+
+
 

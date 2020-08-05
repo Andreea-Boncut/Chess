@@ -24,10 +24,14 @@ class Board
         this.$container.append(this.$gridDiv);
         this.initSquareMatrix();
         this.createSquares();
-        this.createBTN();
+        this.createBTN("START");
+        this.createGame("New Game");
         this.moveFrom=null;
         this.moveTo=null;
+        
         $(document).on('dragstart drop', '.square', this.squareListenerFunction.bind(this)); 
+        $('#jokeBTN').on('click',this.jokeFunction);
+
     }
     
     initSquareMatrix(){
@@ -66,9 +70,23 @@ class Board
                 this.moveFrom = this.squaresMatrix[i][j];
                 this.fromI=i;
                 this.fromJ=j;
+
+                // for(let x = 0; x < 8; x++){
+                //     for(let y = 0; y < 8; y++){
+                      
+                //         if(this.moveFrom.piece.legalMove(this.fromI, this.fromJ,x, y, this.squaresMatrix))
+                //         {
+                //             this.squaresMatrix[x][y].$elem.addClass("highlightedSquare");
+
+                //         }
+                //     }
+                // }
             }
         }
         else {
+
+           
+
             this.moveTo = this.squaresMatrix[i][j];
             this.toI=i;
             this.toJ=j;
@@ -116,16 +134,18 @@ class Board
         this.changeShowPiecesBTN("ROUND: "+Piece.round); 
     }
 
-    createBTN() {
+    createBTN(text) {
 
         let $startDiv=$('<div>');
         this.$container.append($startDiv);//container=main div
         let $showPiecesBTN=$('<a>');
         $showPiecesBTN.attr("id","show-Pieces-btn");
         $showPiecesBTN.attr('href','#');
-        $showPiecesBTN.html("START");
+        $showPiecesBTN.html(text);
         $showPiecesBTN.on("click", showPieces);
         $startDiv.append($showPiecesBTN);
+
+      
     }
 
     changeShowPiecesBTN(text){
@@ -134,10 +154,63 @@ class Board
         $btn.off("click", showPieces);
         $btn.text(text);
     }
+
+    jokeFunction()
+    {
+        
+            $.ajax({
+                method: "GET",
+                url: "https://sv443.net/jokeapi/v2/joke/Any",
+                data: {
+                    type: "single"
+                }
+            }).done(function (data) {
+                $("#jokeP").text(data.joke);
+            });
+
+        
+    }
+
+    createGame(text) {
+
+        let $startDiv=$('<div>');
+        this.$container.append($startDiv);
+        let $showPiecesBTN=$('<a>');
+        $showPiecesBTN.addClass("start");
+        $showPiecesBTN.attr('href','#');
+        $showPiecesBTN.html(text);
+        $showPiecesBTN.on("click", this.postFunction);
+        $startDiv.append($showPiecesBTN);
+    
+      
+    }
+
+    postFunction()
+    {
+        //post moves
+        // $.ajax({
+        //     method: "POST",
+        //     url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game/5",
+        //     data: {move: {from: {x:1, y:2}, to:{x:1,y:2}}}
+        //    }).done(function( msg ) {
+        //       alert( "Data Saved: " + msg );
+        //    });   
+ 
+
+        //post new game
+        $.ajax({
+            method: "POST",
+            url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game",
+            data: {name: "Andreea's game"}
+           }).done(function( msg ) {
+              console.log(  msg );
+           });   
+    }
 }
 
 function showPieces() {
     $emptyBoard.addPieces();
 }
+
 
 

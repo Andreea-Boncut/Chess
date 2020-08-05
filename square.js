@@ -23,7 +23,7 @@ class Square {
             $div.addClass('black-div');
         }
         $div.droppable({
-            accept: '#draggable'
+            accept: '.draggable'
         });
         return $div;
     }

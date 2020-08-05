@@ -89,6 +89,7 @@ div:focus{
        cursor: -webkit-grab;
        cursor: grab;
     }
-  .droppable { 
-    
-    }
+  
+ .highlightedSquare{
+    opacity: 0.5;
+ }

@@ -6,7 +6,7 @@ class Piece {
     constructor(board, color) {
         this.board = board
         this.color = color;
-        this.$elem = $('<img>').attr('id','draggable');
+        this.$elem = $('<img>').addClass('draggable');
         this.$elem.draggable({
             revert: true,
             revertDuration: 0
