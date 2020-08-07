@@ -25,13 +25,11 @@ class Board
         this.initSquareMatrix();
         this.createSquares();
         this.createBTN("START");
-        this.createGame("New Game");
         this.moveFrom=null;
         this.moveTo=null;
-        
         $(document).on('dragstart drop', '.square', this.squareListenerFunction.bind(this)); 
-        $('#jokeBTN').on('click',this.jokeFunction);
-
+        
+        
     }
     
     initSquareMatrix(){
@@ -61,7 +59,8 @@ class Board
     } 
        
     squareListenerFunction(event)
-    {     
+    {   
+       
         const i = event.currentTarget.getAttribute('data-i');
         const j = event.currentTarget.getAttribute('data-j');
 
@@ -70,17 +69,6 @@ class Board
                 this.moveFrom = this.squaresMatrix[i][j];
                 this.fromI=i;
                 this.fromJ=j;
-
-                // for(let x = 0; x < 8; x++){
-                //     for(let y = 0; y < 8; y++){
-                      
-                //         if(this.moveFrom.piece.legalMove(this.fromI, this.fromJ,x, y, this.squaresMatrix))
-                //         {
-                //             this.squaresMatrix[x][y].$elem.addClass("highlightedSquare");
-
-                //         }
-                //     }
-                // }
             }
         }
         else {
@@ -93,17 +81,20 @@ class Board
             console.log("from: "+this.moveFrom+" to: "+this.moveTo);
             if(this.moveFrom.piece!=null){
                 if(this.moveFrom.piece.color==Piece.round){
-                    if (this.moveFrom.piece.legalMove(this.fromI, this.fromJ,this.toI,  this.toJ, this.squaresMatrix)){
-                        if(Piece.round=="white"){
+                    if (this.moveFrom.piece.legalMove(this.fromI, this.fromJ,this.toI,  this.toJ, this.squaresMatrix)){   
+                        this.postMove(this.fromI,this.fromJ,this.toI,this.toJ);
+                        if(Piece.round=="white")
+                        {
                             Piece.round="black";
                         }
-                        else{
+                        else
+                        {
                             Piece.round="white";
                         }
-                        this.moveFrom.inner //update la sqMatr
                         this.moveTo.setPiece2(this.moveFrom.piece);
                         this.moveFrom.piece = null;
                         this.updateCurrentState();
+                       
                     }
                 }
             }
@@ -112,6 +103,7 @@ class Board
             this.moveTo = null;
             this.changeShowPiecesBTN("ROUND: "+Piece.round);
         }
+      
     }
 
     updateCurrentState() {
@@ -132,6 +124,7 @@ class Board
             }
         }
         this.changeShowPiecesBTN("ROUND: "+Piece.round); 
+        setInterval(this.getMoves(this.squaresMatrix),1000)
     }
 
     createBTN(text) {
@@ -144,7 +137,6 @@ class Board
         $showPiecesBTN.html(text);
         $showPiecesBTN.on("click", showPieces);
         $startDiv.append($showPiecesBTN);
-
       
     }
 
@@ -155,21 +147,6 @@ class Board
         $btn.text(text);
     }
 
-    jokeFunction()
-    {
-        
-            $.ajax({
-                method: "GET",
-                url: "https://sv443.net/jokeapi/v2/joke/Any",
-                data: {
-                    type: "single"
-                }
-            }).done(function (data) {
-                $("#jokeP").text(data.joke);
-            });
-
-        
-    }
 
     createGame(text) {
 
@@ -179,38 +156,68 @@ class Board
         $showPiecesBTN.addClass("start");
         $showPiecesBTN.attr('href','#');
         $showPiecesBTN.html(text);
-        $showPiecesBTN.on("click", this.postFunction);
         $startDiv.append($showPiecesBTN);
     
       
     }
 
-    postFunction()
+   
+    postNewGame()
     {
-        //post moves
-        // $.ajax({
-        //     method: "POST",
-        //     url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game/5",
-        //     data: {move: {from: {x:1, y:2}, to:{x:1,y:2}}}
-        //    }).done(function( msg ) {
-        //       alert( "Data Saved: " + msg );
-        //    });   
- 
-
-        //post new game
         $.ajax({
             method: "POST",
             url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game",
             data: {name: "Andreea's game"}
-           }).done(function( msg ) {
+        }).done(function( msg ) {
               console.log(  msg );
-           });   
+            });   
     }
+
+    postMove(fromI, fromJ, toI, toJ)
+    {
+        
+        $.ajax({
+            method: "POST",
+            url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game/127",
+            data: {move: {from: {x: fromI, y:fromJ}, to:{x:toI,y:toJ}}}
+           }).done(function( msg ) {
+              alert( msg );
+        });   
+ 
+    }
+
+    getMoves(squaresMatrix){
+        
+        $.ajax({
+            method: "GET",
+            url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game/127",
+            
+        }).done((data)=> {
+            console.log(data.moves.length);
+            let fromI=data.moves[data.moves.length-1].from.x;
+            let fromJ=data.moves[data.moves.length-1].from.y;
+            let toI=data.moves[data.moves.length-1].to.x;
+            let toJ=data.moves[data.moves.length-1].to.y;
+
+            if(data.moves.length%2!=0)
+            {
+                let toSquare=squaresMatrix[toI][toJ];
+                let fromSquare=squaresMatrix[fromI][fromJ].piece;
+                toSquare.setPiece(fromSquare);
+                console.log("moved from "+fromI+" "+fromJ+" to " + toI+" "+ toJ);
+            }
+    
+    });
+    
+    }
+   
 }
 
 function showPieces() {
     $emptyBoard.addPieces();
 }
+
+
 
 
 

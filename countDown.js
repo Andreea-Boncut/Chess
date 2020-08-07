@@ -6,7 +6,7 @@ $countDown.attr('id','countDown');
 let $mainDiv = $('<div>');
 $mainDiv.addClass('main-div');
 
-let seconds=2;
+let seconds=5;
 $('body').append($mainDiv);
 $mainDiv.append($countDown);
 
@@ -22,8 +22,6 @@ function Decrement(){
         $emptyBoard=new Board($mainDiv);
        
     }
-
-    
 }
 
 
