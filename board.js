@@ -73,8 +73,6 @@ class Board
         }
         else {
 
-           
-
             this.moveTo = this.squaresMatrix[i][j];
             this.toI=i;
             this.toJ=j;

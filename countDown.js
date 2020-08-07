@@ -23,7 +23,3 @@ function Decrement(){
        
     }
 }
-
-
-
-
